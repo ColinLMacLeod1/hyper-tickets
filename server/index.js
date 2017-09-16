@@ -22,46 +22,101 @@ console.log(port)
 
 
 // Connect to CockroachDB
-var sequelize = new Sequelize('test', 'root', '', dbConfig);
+const sequelize = new Sequelize('test', 'root', '', dbConfig);
 
-// Define the Account model for the "accounts" table.
-var Account = sequelize.define('accounts', {
+// Define the Account model for the accounts table
+const Account = sequelize.define('accounts', {
   id: { type: Sequelize.INTEGER, primaryKey: true },
   balance: { type: Sequelize.INTEGER },
   text: {type: Sequelize.STRING}
 });
 
-// Define
-
-// Create the "accounts" table.
-Account.sync({force: false}).then(function() {
-  // Insert two rows into the "accounts" table.
-  /*
-  return Account.bulkCreate([
-    {id: 1, balance: 1000},
-    {id: 2, balance: 250}
-  ]);
-  */
-}).then(function() {
-  // Retrieve accounts.
-  return Account.findAll();
-}).then(function(accounts) {
-  // Print out the balances.
-  accounts.forEach(function(account) {
-    console.log(account.id + ' ' + account.balance);
-  });
-}).catch(function(err) {
-  console.error('error: ' + err.message);
+// Define the Ticket model for the tickets table
+const Ticket = sequelize.define('tickets', {
+  id: { type: Sequelize.INTEGER, primaryKey: true },
+  owner: { type: Sequelize.STRING },
+  title: {type: Sequelize.STRING},
+  location: {type: Sequelize.STRING},
+  price: {type: Sequelize.DECIMAL},
+  type: {type: Sequelize.STRING},
+  seat: {type: Sequelize.STRING}
 });
+
+// Define the Account model for the accounts table
+const User = sequelize.define('users', {
+  id: { type: Sequelize.INTEGER, primaryKey: true },
+  displayName: { type: Sequelize.STRING },
+  avatar: {type: Sequelize.STRING}
+});
+
+/*
+// Create the each table.
+if(process.env.UPDATETABLES){
+  // Tickets table
+  Ticket.sync({force: true}).then(function() {
+    // Insert two rows into the "accounts" table.
+    Ticket.bulkCreate([
+      {id: 1}
+    ]);
+  }).catch(function(err) {
+    console.error('error: ' + err.message);
+  });
+  // Users table
+  User.sync({force: true}).then(function() {
+    // Insert two rows into the "accounts" table.
+    User.bulkCreate([
+      {id: 1}
+    ]);
+  }).catch(function(err) {
+    console.error('error: ' + err.message);
+  });
+}
+*/
 
 // BUY Ticket
 app.post('/api/buy', function(req,res){
-
+  
 })
 
 // CREATE Ticket
-app.post('/api/create', function(req,res){
-
+app.post('/api/create', (req,res)=>{
+  Ticket.findAndCountAll({}).then((result)=>{
+    var newid = result.count+1;
+    // ADD TO BLOCKCHAIN HERE .then ->
+    Ticket.bulkCreate([{
+      id: newid,
+      owner: req.body.owner,
+      title: req.body.title,
+      location: req.body.location,
+      price: req.body.price,
+      type: req.body.type,
+      seat: req.body.seat
+    }]).then(() => {
+      Ticket.findAndCountAll({
+        where:{
+          id: newid
+        }}).then((result)=>{
+          if(result.count==0){
+            console.log('Ticket not saved')
+            res.send('Ticket not Saved')
+          } else if(result.count==1){
+            console.log('Ticket saved')
+            res.send('Ticket Saved')
+          }
+      }).catch((err)=>{
+          res.send(err)
+          console.log(err)
+      })
+    }).catch((err)=>{
+      if(err.name=='SequelizeUniqueConstraintError'){
+        console.log('Ticket already exists')
+        res.send('Ticket already exists')
+      } else {
+        res.send(err)
+        console.log(err)
+      }
+    })
+  })
 })
 
 // EDIT Ticket

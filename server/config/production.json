@@ -1,7 +1,10 @@
 {
   "Customer":{
     "dbConfig":{
-      "uri":"mongodb://root:Rzp6SjPE@104.154.137.20"
+      "host": "35.190.184.71",
+      "dialect": "postgres",
+      "port": 26257,
+      "logging": false
     }
   },
   "Presets":{
