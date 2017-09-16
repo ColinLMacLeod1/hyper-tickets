@@ -1,0 +1,19 @@
+{
+  "Customer":{
+    "dbConfig":{
+      "dialect": "postgres",
+      "port": 26257,
+      "logging": false
+    }
+  },
+  "Presets":{
+    "users":{
+      "teamuser":"colin",
+      "teampassword":"macleod",
+      "testuser":"andrew",
+      "testpassword":"litt"
+    },
+    "codes":["1234","5678"],
+    "port": 8080
+  }
+}
