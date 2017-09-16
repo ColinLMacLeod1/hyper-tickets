@@ -11,6 +11,10 @@
     - [ ] CREATE Ticket
     - [ ] EDIT Ticket
     - [ ] DELETE Ticket
+    - [ ] GET User data
+      - [ ] Name
+      - [ ] Tickets
+    - [ ] LOGIN
 - [ ] Square for payments
 
 ## DB
