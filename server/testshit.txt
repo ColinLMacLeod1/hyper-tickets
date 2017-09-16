@@ -1,0 +1,15 @@
+Create ticket test
+{
+	"owner":"Colin",
+	"title":"Test Ticket",
+	"location":"here",
+	"price":13.50,
+	"type":"floor",
+	"seat":"A1"
+}
+
+Buy ticket test
+{
+	"owner":"doofus rick",
+	"id":3
+}

@@ -75,7 +75,34 @@ if(process.env.UPDATETABLES){
 
 // BUY Ticket
 app.post('/api/buy', function(req,res){
-  
+  // Blockchain shit goes here then ->
+  Ticket.update({
+    owner: req.body.owner
+  }, {
+    where: {
+      id:req.body.id
+    }
+  }).then(()=>{
+    Ticket.findOne({
+      where: {
+        id:req.body.id
+      }
+    }).then((result)=>{
+      if(!result){
+        res.send('Ticket does not exist')
+      } else if(result.owner==req.body.owner){
+        res.send('Transaction Complete')
+      } else {
+        res.send('Transaction Incomplete')
+      }
+    }).catch((err)=>{
+      console.log(err)
+      res.send(err)
+    })
+  }).catch((err)=>{
+    console.log(err)
+    res.send(err)
+  })
 })
 
 // CREATE Ticket
@@ -83,7 +110,7 @@ app.post('/api/create', (req,res)=>{
   Ticket.findAndCountAll({}).then((result)=>{
     var newid = result.count+1;
     // ADD TO BLOCKCHAIN HERE .then ->
-    Ticket.bulkCreate([{
+    Ticket.create([{
       id: newid,
       owner: req.body.owner,
       title: req.body.title,
