@@ -14,6 +14,6 @@
       "testpassword":"litt"
     },
     "codes":["1234","5678"],
-    "port": 8080
+    "port": 3000
   }
 }
