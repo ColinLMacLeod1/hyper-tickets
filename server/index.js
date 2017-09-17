@@ -97,7 +97,7 @@ app.post('/api/buy', (req, res) => {
                 const url = `${blockchainUrl}tickets/${req.body.id}`;
                 console.log(url);
                 return axios.put(url, { ownerId: req.body.ownerId })
-                    .then(response => res.send(response));
+                    .then(response => res.send('On the chain - transaction'));
             } else {
                 return res.status(400).send('Transaction Incomplete')
             }
@@ -112,7 +112,7 @@ app.post('/api/buy', (req, res) => {
 app.post('/api/create', (req, res) => {
     let newid;
     Ticket.max('id').then((result) => {
-        newid = result + 1;
+        newid = result ? result + 1 : 0;
         // ADD TO BLOCKCHAIN HERE .then ->
         Ticket.create({
             id: newid,
