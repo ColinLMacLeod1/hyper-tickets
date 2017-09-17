@@ -33,11 +33,16 @@ export default class Search extends React.Component {
        console.log(err)
      })
    }
-   buy = (id) => {
+
+   buy = (id,index) => {
+     const self = this;
+     console.log(index)
+     console.log(this.state.results[index].data.ownerId)
      axios.post('https://hyper-tickets.appspot.com/api/buy',{
        ownerId:"colin",
        id:id
      }).then(()=>{
+       self.search(self.state.search)
        console.log("Bought")
      }).catch((err)=>{
        console.log(err)
@@ -69,7 +74,7 @@ export default class Search extends React.Component {
 							subtitle={ticket.type+' for $'+ticket.price.toString()+' in seat '+ticket.seat}
 						/>
             <CardActions>
-              <RaisedButton label="Buy" primary={true} onClick={()=>{this.buy(ticket.id)}}/>
+              <RaisedButton label="Buy" primary={true} onClick={()=>{this.buy(ticket.id,index)}}/>
             </CardActions>
 
 					</Card>
