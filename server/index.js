@@ -21,6 +21,8 @@ const codes = config.get('Presets.codes');
 const port = config.get('Presets.port')
 console.log(port)
 
+// Serve static files
+app.use(express.static(path.join(__dirname, 'testDist')))
 
 // Connect to CockroachDB
 const sequelize = new Sequelize('test', 'root', '', dbConfig);
@@ -349,6 +351,11 @@ app.get('/api/coincode/', (req,res)=>{
 app.get('/test', (req,res)=>{
   console.log('test')
   res.send("test")
+})
+
+// Catch all Handler
+app.get('*', (req,res)=>{
+  res.sendFile(path.join(__dirname+'testDist/index.html'))
 })
 
 // Server Port
