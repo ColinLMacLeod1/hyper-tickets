@@ -336,7 +336,7 @@ app.get('/api/coincode/', (req,res)=>{
     }).catch((err)=>{
       console.log(err)
     })
-    axios.get('', {
+    axios.get('https://api.coinbase.com/v2/user', {
       headers: {
         Authorization: 'Bearer ' + response.data.access_token
       }}).then((resdata)=>{
