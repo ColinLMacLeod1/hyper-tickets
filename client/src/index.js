@@ -5,6 +5,15 @@ import TicketList from './components/TicketList';
 import App from './components/App';
 import ReactDOM from 'react-dom';
 import React from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#6699ff',
+		accent1Color: '#ffcc33'
+  }
+});
 
 /**
  * Renders the application, redux store is the top level component.
@@ -12,18 +21,19 @@ import React from 'react';
  */
 const renderApplication = () => {
 	ReactDOM.render(
-		<Provider store={ticketStore}>
-			<BrowserRouter>
-				<div>
-					<Route exact path="/" component={App} />
-					<Route exact path="/ticketlists" component={TicketList} />
-				</div>
-			</BrowserRouter>
-		</Provider>
+		<MuiThemeProvider muiTheme={muiTheme}>
+			<Provider store={ticketStore}>
+				<BrowserRouter>
+						<Route path="/" component={App} />
+				</BrowserRouter>
+			</Provider>
+		</MuiThemeProvider>
 		,document.getElementById('root')
 	);
 }
 
+var injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
 // render the application
 renderApplication();
 

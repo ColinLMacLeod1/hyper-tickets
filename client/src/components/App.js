@@ -4,10 +4,13 @@ import { selectors as ticketSelectors } from '../state/ticketReducer';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TicketList from './TicketList';
+import Search from './Search'
 import Login from './Login';
+import Coinbase from './Coinbase';
+import {Tabs, Tab} from 'material-ui/Tabs'
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 class App extends Component {
-
 	/**
 	 * Renders the login form if the user is not authenticated.
 	 */
@@ -26,9 +29,18 @@ class App extends Component {
 	 * Renders the application.
 	 */
 	render = () => {
+
 		return (
 			<div id="container">
-				{this.renderTicketList()}
+				<center className="header"><h1 className="headerTitle">Hyper Tickets</h1></center>
+				<Tabs>
+					<Tab label="Discover">
+						{this.renderTicketList()}
+					</Tab>
+					<Tab label="Search">
+						<Search />
+					</Tab>
+				</Tabs>
 			</div>
 		)
 	}
