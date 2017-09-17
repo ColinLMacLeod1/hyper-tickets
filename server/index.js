@@ -191,6 +191,9 @@ app.post('/api/signup', (req,res)=>{
     username: req.body.username,
     displayName: req.body.displayName,
     password: req.body.password
+  }).then(()=>{
+    console.log('User Signed Up')
+    res.send('User Signed Up')
   }).catch((err)=>{
     if(err.name=='SequelizeUniqueConstraintError'){
       console.log('User already exists')
