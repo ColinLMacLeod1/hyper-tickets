@@ -112,7 +112,11 @@ app.post('/api/buy', (req, res) => {
 app.post('/api/create', (req, res) => {
     let newid;
     Ticket.max('id').then((result) => {
-        newid = result ? result + 1 : 0;
+        if (isNaN(result)) {
+            newid = 0;
+        } else {
+            newid = result + 1;
+        }
         // ADD TO BLOCKCHAIN HERE .then ->
         Ticket.create({
             id: newid,
@@ -128,10 +132,10 @@ app.post('/api/create', (req, res) => {
                         id: newid
                     }
                 }).then((result) => {
-                    if (result.count == 0) {
+                    if (result.count === 0) {
                         console.log('Ticket not saved')
                         res.send('Ticket not Saved')
-                    } else if (result.count == 1) {
+                    } else if (result.count === 1) {
                         console.log('Ticket saved')
                         // res.send('Ticket Saved')
                     }

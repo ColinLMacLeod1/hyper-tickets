@@ -116,9 +116,10 @@ function createTicket(req, res, next) {
         .then(response => {
             if (response.status === 'SUCCESS') {
                 console.log('Successfully sent transaction to the orderer.');
-                res.send(txId.getTransactionID());
+                return res.send(txId.getTransactionID());
             } else {
-                res.status(response.status).send('Failed to order the transaction. Error code: ' + response.status);
+                console.error('Failed to order the transaction. Error code: ' + response.status);
+                return res.status(400).send('Failed to order the transaction. Error code: ' + response.status);
             }
         })
         .catch(err => {
