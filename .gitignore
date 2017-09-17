@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 **/node_modules/
 dist/
+=======
+.ides
+.DS_STORE
+node_modules
+>>>>>>> 28d363a06961605ae8cc78c0d8b8e95cd7b5bb66
