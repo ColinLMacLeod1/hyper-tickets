@@ -42,7 +42,7 @@ const User = sequelize.define('users', {
   displayName: { type: Sequelize.STRING },
   avatar: {type: Sequelize.STRING}
 });
-/*
+
 // Create the each table.
 if(process.env.UPDATETABLES){
   // Tickets table
@@ -64,7 +64,7 @@ if(process.env.UPDATETABLES){
     console.error('error: ' + err.message);
   });
 }
-*/
+
 
 // BUY Ticket
 app.post('/api/buy', (req,res)=>{
@@ -211,6 +211,20 @@ app.get('/api/recenttickets', (req,res)=>{
 
 })
 
+// GET single ticket
+app.get('/api/ticket/:id', (req,res)=>{
+  Ticket.findOne({
+    where:{
+      id:req.params.id
+    }
+  }).then((result)=>{
+    console.log(result)
+    res.send(JSON.stringify(result))
+  }).catch((err)=>{
+    console.log(err)
+    res.send(err)
+  })
+})
 
 
 // test
