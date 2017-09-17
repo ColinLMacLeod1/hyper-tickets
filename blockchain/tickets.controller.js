@@ -3,6 +3,7 @@ const path = require('path');
 const util = require('util');
 
 const ledgerController = {
+    createTicket,
     getTicketHistory,
     listAllTickets,
     transferTicket
@@ -11,7 +12,7 @@ const ledgerController = {
 module.exports = ledgerController;
 
 const OPTIONS = {
-    walletPath: path.join(__dirname, './fabcar/creds'),
+    walletPath: path.join(__dirname, './creds'),
     userId: 'PeerAdmin',
     channelId: 'mychannel',
     chaincodeId: 'hyper-tickets',
@@ -19,6 +20,114 @@ const OPTIONS = {
     eventUrl: 'grpc://localhost:7053',
     ordererUrl: 'grpc://localhost:7050'
 };
+
+function createTicket(req, res, next) {
+    const { id, ownerId } = req.body;
+
+    const client = new hfc();
+    let txId = null;
+    let channel = {};
+    return _initialize(client)
+        .then(ch => {
+            channel = ch;
+            txId = client.newTransactionID();
+            console.log("Assigning transaction_id: ", txId._transaction_id);
+            const request = {
+                chaincodeId: OPTIONS.chaincodeId,
+                fcn: 'createTicket',
+                args: [id, ownerId],
+                txId
+            };
+            return channel.sendTransactionProposal(request);
+        })
+        .then(response => {
+            const proposalResponses = response[0];
+            const proposal = response[1];
+            const header = response[2];
+            let isProposalGood = false;
+            if (proposalResponses && proposalResponses[0].response &&
+                proposalResponses[0].response.status === 200) {
+                isProposalGood = true;
+                console.log('transaction proposal was good');
+            } else {
+                console.error('transaction proposal was bad');
+            }
+            if (isProposalGood) {
+                console.log(util.format(
+                    'Successfully sent Proposal and received ProposalResponse: Status - %s, message - "%s", metadata - "%s", endorsement signature: %s',
+                    proposalResponses[0].response.status, proposalResponses[0].response.message,
+                    proposalResponses[0].response.payload, proposalResponses[0].endorsement.signature));
+                const request = {
+                    proposalResponses: proposalResponses,
+                    proposal: proposal,
+                    header: header
+                };
+                // set the transaction listener and set a timeout of 30sec
+                // if the transaction did not get committed within the timeout period,
+                // fail the test
+                const transactionId = txId.getTransactionID();
+                const eventPromises = [];
+                let eventHub = client.newEventHub();
+                eventHub.setPeerAddr(OPTIONS.eventUrl);
+                eventHub.connect();
+
+                let txPromise = new Promise((resolve, reject) => {
+                    let handle = setTimeout(() => {
+                        eventHub.disconnect();
+                        reject();
+                    }, 30000);
+
+                    eventHub.registerTxEvent(transactionId, (tx, code) => {
+                        clearTimeout(handle);
+                        eventHub.unregisterTxEvent(transactionId);
+                        eventHub.disconnect();
+
+                        if (code !== 'VALID') {
+                            console.error(
+                                'The transaction was invalid, code = ' + code);
+                            reject();
+                        } else {
+                            console.log(
+                                'The transaction has been committed on peer ' +
+                                eventHub._ep._endpoint.addr);
+                            resolve();
+                        }
+                    });
+                });
+                eventPromises.push(txPromise);
+                const sendPromise = channel.sendTransaction(request);
+                return Promise.all([sendPromise].concat(eventPromises))
+                    .then((results) => {
+                        console.log(' event promise all complete and testing complete');
+                        return results[0]; // the first returned value is from the 'sendPromise' which is from the
+                                           // 'sendTransaction()' call
+                    })
+                    .catch(err => {
+                        console.error(
+                            'Failed to send transaction and get notifications within the timeout period.'
+                        );
+                        return 'Failed to send transaction and get notifications within the timeout period.';
+                    });
+            } else {
+                console.error(
+                    'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...'
+                );
+                return 'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...';
+            }
+        })
+        .then(response => {
+            if (response.status === 'SUCCESS') {
+                console.log('Successfully sent transaction to the orderer.');
+                return txId.getTransactionID();
+            } else {
+                console.error('Failed to order the transaction. Error code: ' + response.status);
+                return 'Failed to order the transaction. Error code: ' + response.status;
+            }
+        })
+        .catch(err => {
+            res.status(400).send(`Caught Error ${err}`);
+        });
+}
 
 function getTicketHistory(req, res, next) {
     const { id: ticketId }  = req.params;

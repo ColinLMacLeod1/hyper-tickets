@@ -4,9 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "fabric-restart": "cd fabcar && ./stopFabric.sh && ./startFabric.sh",
-    "fabric-start": "cd fabcar && ./startFabric.sh",
-    "fabric-stop": "cd fabcar && ./stopFabric.sh"
+    "fabric-start": "cd scripts && ./startFabric.sh",
+    "fabric-stop": "cd basic-network && ./stop.sh",
+    "fabric-teardown": "cd basic-network && ./teardown.sh"
   },
   "author": "",
   "license": "ISC",
