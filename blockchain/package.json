@@ -1,0 +1,19 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "fabric-restart": "cd fabcar && ./stopFabric.sh && ./startFabric.sh",
+    "fabric-start": "cd fabcar && ./startFabric.sh",
+    "fabric-stop": "cd fabcar && ./stopFabric.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "fabric-ca-client": "^1.0.2",
+    "fabric-client": "^1.0.2"
+  }
+}
