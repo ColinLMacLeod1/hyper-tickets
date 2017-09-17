@@ -23,6 +23,7 @@
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.1",
+    "coinbase": "^2.0.6",
     "config": "^1.26.2",
     "cors": "^2.8.4",
     "express": "^4.15.4",

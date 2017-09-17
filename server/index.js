@@ -40,7 +40,8 @@ const User = sequelize.define('users', {
   username: { type: Sequelize.STRING, primaryKey: true },
   password: { type: Sequelize.STRING },
   displayName: { type: Sequelize.STRING },
-  avatar: {type: Sequelize.STRING}
+  avatar: {type: Sequelize.STRING},
+  coinAccount: {type: Sequelize.STRING}
 });
 /*
 // Create the each table.
@@ -159,6 +160,14 @@ app.post('/api/delete', (req,res)=>{
       where: {
         id: req.body.id
       }
+    }).then((result)=>{
+      if(!result){
+        res.send('Ticket deleted')
+        conosle.log('Ticket deleted')
+      } else {
+        res.send('Ticket not deleted')
+        conosle.log('Ticket not deleted')
+      }
     })
   }).catch((err)=>{
 
@@ -177,7 +186,7 @@ app.post('/api/login', (req,res)=>{
     if(!result){
       res.send(false)
     } else {
-      res.send(true)
+      res.send(result)
     }
   }).catch((err)=>{
     res.send(err)
@@ -212,7 +221,7 @@ app.get('/api/user/:username', (req,res)=>{
     where:{
       username: req.params.username
     }
-  }).then((result){
+  }).then((result)=>{
     console.log('User Found')
     res.send(JSON.stringify(result))
   }).catch((err)=>{
@@ -226,8 +235,19 @@ app.post('/api/search', (req,res)=>{
   if(true) {
     Ticket.findAll({
       where:{
-        title:
+        title: {
+          $iLike: '%'+req.body.search+'%'
+        }
       }
+    }).then((result)=>{
+      if(result){
+        res.send(result)
+      } else{
+        res.send(null)
+      }
+    }).catch((err)=>{
+      res.send(err)
+      console.log(err)
     })
   }
 })
