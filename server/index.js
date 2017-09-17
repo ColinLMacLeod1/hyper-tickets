@@ -52,29 +52,24 @@ const User = sequelize.define('users', {
     coinName: { type: Sequelize.STRING },
     coinProfile: { type: Sequelize.STRING }
 });
-/*
+
 // Create the each table.
 if(process.env.UPDATETABLES){
   // Tickets table
   Ticket.sync({force: true}).then(function() {
     // Insert two rows into the "accounts" table.
-    Ticket.bulkCreate([
-      {id: 1}
-    ]);
+
   }).catch(function(err) {
     console.error('error: ' + err.message);
   });
   // Users table
   User.sync({force: true}).then(function() {
     // Insert two rows into the "accounts" table.
-    User.bulkCreate([
-      {username: "test"}
-    ]);
+
   }).catch(function(err) {
     console.error('error: ' + err.message);
   });
 }
-*/
 
 // BUY Ticket
 app.post('/api/buy', (req, res) => {
