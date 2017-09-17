@@ -6,7 +6,7 @@ const ledgerRouter = require('./router');
 
 const app = express();
 
-const port = 8080;
+const port = process.env.BLOCKCHAIN_SERVER_PORT || 8080;
 
 app.use(bodyParser.json());
 app.use('/tickets', ledgerRouter);
