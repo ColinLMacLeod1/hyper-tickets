@@ -40,19 +40,6 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 }
 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
-    tickets := []Ticket{
-        Ticket{OwnerId: "2"},
-    }
-
-    i := 0
-    for i < len(tickets) {
-        fmt.Println("i is ", i)
-        ticketAsBytes, _ := json.Marshal(tickets[i])
-        APIstub.PutState(strconv.Itoa(i), ticketAsBytes)
-        fmt.Println("Added", tickets[i])
-        i = i + 1
-    }
-
     return shim.Success(nil)
 }
 
