@@ -94,7 +94,7 @@ app.post('/api/buy', (req,res)=>{
     }).then((result)=>{
       if(!result){
         res.send('Ticket does not exist')
-      } else if(result.owner==req.body.owner){
+      } else if(result.ownerId==req.body.owneriD){
         res.send('Transaction Complete')
       } else {
         res.send('Transaction Incomplete')
@@ -385,7 +385,7 @@ app.post('/api/pay', (req,res)=>{
         payInfo.from = from.coinId
         payInfo.access = from.coinCode
         payInfo.refresh = from.coinName
-        
+
       })
   })
 })

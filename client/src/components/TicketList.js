@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Provider from 'react-redux';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-
+import RaisedButton from 'material-ui/RaisedButton';
 
 import { selectors as ticketSelectors } from '../state/TicketReducer';
 
@@ -26,6 +26,9 @@ class TicketList extends Component {
 							title={ticket.title}
 							subtitle={ticket.type+' for $'+ticket.price.toString()+' in seat '+ticket.seat}
 						/>
+						<CardActions>
+							<RaisedButton label="Buy" primary={true} />
+						</CardActions>
 					</Card>
 				</div>
 			)
