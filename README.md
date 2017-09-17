@@ -52,3 +52,4 @@ avatar: {type: Sequelize.STRING}
 |/api/delete|id (integer)|String result|POST|
 |/api/create|owner,title,location,price(decimal),type,seat|String result|POST|
 |/api/buy|owner(purchaser),id(integer)|String result|POST|
+|/api/edit|<parameter(s) to change>,id(required)|'Updated' or err|POST|
