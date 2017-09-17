@@ -27,7 +27,7 @@
 
 #### Models
 
-1. Tickets
+1. Tickets  
 id: { type: Sequelize.INTEGER, primaryKey: true },  
 owner: { type: Sequelize.STRING },  
 title: {type: Sequelize.STRING},  
@@ -36,7 +36,7 @@ price: {type: Sequelize.DECIMAL},
 type: {type: Sequelize.STRING},  
 seat: {type: Sequelize.STRING}  
 
-2. Users
+2. Users  
 username: { type: Sequelize.STRING, primaryKey: true },  
 password: { type: Sequelize.STRING },  
 displayName: { type: Sequelize.STRING },  
