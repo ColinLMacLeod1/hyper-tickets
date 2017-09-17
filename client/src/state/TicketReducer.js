@@ -63,7 +63,6 @@ const handlers = {
 		 }
 	},
 	[actions.LOGGED_OUT]: (state, action) => {
-		debugger;
 		return {
 			...state,
 			auth: false,

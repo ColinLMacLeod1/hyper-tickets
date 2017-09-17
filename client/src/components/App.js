@@ -4,7 +4,6 @@ import { selectors as ticketSelectors } from '../state/ticketReducer';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TicketList from './TicketList';
-import { Link } from './react-router-dom';
 import Login from './Login';
 
 class App extends Component {
@@ -27,7 +26,6 @@ class App extends Component {
 	 * Renders the application.
 	 */
 	render = () => {
-		console.log('login', this.props);
 		return (
 			<div id="container">
 				{this.renderTicketList()}
