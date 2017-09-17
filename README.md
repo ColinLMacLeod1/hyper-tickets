@@ -22,3 +22,32 @@
 
 ## Chain Code (Zack)
 - [ ] Store transactions for tickets
+
+## Hyper-Tickets api
+
+#### Models
+
+1. Tickets
+id: { type: Sequelize.INTEGER, primaryKey: true },
+owner: { type: Sequelize.STRING },
+title: {type: Sequelize.STRING},
+location: {type: Sequelize.STRING},
+price: {type: Sequelize.DECIMAL},
+type: {type: Sequelize.STRING},
+seat: {type: Sequelize.STRING}
+
+2. Users
+username: { type: Sequelize.STRING, primaryKey: true },
+password: { type: Sequelize.STRING },
+displayName: { type: Sequelize.STRING },
+avatar: {type: Sequelize.STRING}
+
+|Endpoint          |Params             |Returns         |Method|
+|/api/ticket/:id   |id        |Ticket (object) |GET|
+|/api/tickelist|None|Recent 20 tickets(array)|GET|
+|/api/user/:username|username|User (object)|GET|
+|/api/signup|username, displayName, password (strings)|String result|POST|
+|/api/login|username, password (string)|User (object) or FALSE|POST|
+|/api/delete|id (integer)|String result|POST|
+|/api/create|owner,title,location,price(decimal),type,seat|String result|POST|
+|/api/buy|owner(purchaser),id(integer)|String result|POST|
