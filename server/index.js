@@ -46,7 +46,7 @@ const User = sequelize.define('users', {
   token_type: {type: Sequelize.STRING},
   scope: {type: Sequelize.STRING}
 });
-
+/*
 // Create the each table.
 if(process.env.UPDATETABLES){
   // Tickets table
@@ -68,7 +68,7 @@ if(process.env.UPDATETABLES){
     console.error('error: ' + err.message);
   });
 }
-
+*/
 
 // BUY Ticket
 app.post('/api/buy', (req,res)=>{
@@ -109,7 +109,7 @@ app.post('/api/create', (req,res)=>{
     // ADD TO BLOCKCHAIN HERE .then ->
     Ticket.create({
       id: newid,
-      ownerId: req.body.owner,
+      ownerId: req.body.ownerId,
       title: req.body.title,
       location: req.body.location,
       price: req.body.price,
@@ -148,7 +148,34 @@ app.post('/api/create', (req,res)=>{
 
 // EDIT Ticket
 app.post('/api/edit', (req,res)=>{
-
+  Ticket.findOne({
+    where:{
+      id:req.body.id
+    }
+  }).then((result)=>{
+    var newTicket = Object.assign({},result.dataValues,req.body)
+    Ticket.update({
+      ownerId: newTicket.ownerId,
+      title: newTicket.title,
+      location: newTicket.location,
+      price: Number(newTicket.price),
+      type: newTicket.type,
+      seat: newTicket.seat
+    }, {
+      where: {
+        id:req.body.id
+      }
+    }).then((result)=>{
+      res.send('Updated')
+    })
+    .catch((err)=>{
+      res.send(err)
+      console.log(err)
+    })
+  }).catch((err)=>{
+    res.send(err)
+    console.log(err)
+  })
 })
 
 // DELETE Ticket
@@ -311,7 +338,7 @@ app.get('/api/coincode/', (req,res)=>{
       console.log(err)
     })
 
-    res.redirect('https://hyper-tickets.appspot.com/test')
+    res.redirect('https://hyper-tickets.appspot.com/api/user/'+user)
   }).catch((err)=>{
     console.log(err)
     res.send(JSON.stringify(err))
