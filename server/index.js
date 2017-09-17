@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const config = require('config')
 const yes = require('yes-https')
 const Sequelize = require('sequelize-cockroachdb')
+const axios = require('axios')
 
 const app = express()
 
@@ -27,7 +28,7 @@ const sequelize = new Sequelize('test', 'root', '', dbConfig);
 // Define the Ticket model for the tickets table
 const Ticket = sequelize.define('tickets', {
   id: { type: Sequelize.INTEGER, primaryKey: true },
-  owner: { type: Sequelize.STRING },
+  ownerId: { type: Sequelize.STRING },
   title: {type: Sequelize.STRING},
   location: {type: Sequelize.STRING},
   price: {type: Sequelize.DECIMAL},
@@ -41,9 +42,11 @@ const User = sequelize.define('users', {
   password: { type: Sequelize.STRING },
   displayName: { type: Sequelize.STRING },
   avatar: {type: Sequelize.STRING},
-  coinAccount: {type: Sequelize.STRING}
+  coinCode: {type: Sequelize.STRING},
+  token_type: {type: Sequelize.STRING},
+  scope: {type: Sequelize.STRING}
 });
-/*
+
 // Create the each table.
 if(process.env.UPDATETABLES){
   // Tickets table
@@ -65,13 +68,13 @@ if(process.env.UPDATETABLES){
     console.error('error: ' + err.message);
   });
 }
-*/
+
 
 // BUY Ticket
 app.post('/api/buy', (req,res)=>{
   // Blockchain shit goes here then ->
   Ticket.update({
-    owner: req.body.owner
+    ownerId: req.body.ownerId
   }, {
     where: {
       id:req.body.id
@@ -106,7 +109,7 @@ app.post('/api/create', (req,res)=>{
     // ADD TO BLOCKCHAIN HERE .then ->
     Ticket.create({
       id: newid,
-      owner: req.body.owner,
+      ownerId: req.body.owner,
       title: req.body.title,
       location: req.body.location,
       price: req.body.price,
@@ -283,6 +286,37 @@ app.get('/api/ticket/:id', (req,res)=>{
   })
 })
 
+// GET coinbase
+app.get('/api/coincode/', (req,res)=>{
+  var user = req.query.state;
+  console.log(req.query.code)
+  //res.send(JSON.stringify(req.query.code+req.query.state))
+  axios.post('https://api.coinbase.com/oauth/token',{
+    grant_type: "authorization_code",
+    code: req.query.code,
+    client_id: "f1bb82513c4093f5e22d6d9c7002c6bb192edd597513f661e047b39cb7b8db3e",
+    client_secret: "0f3cd06de247ba1e9f731ad34df9385e2ef41293a0d277274b21fb4fee4d4dd7",
+    redirect_uri: "https://hyper-tickets.appspot.com/api/coincode/"
+  }).then((response)=>{
+    console.log(response.data)
+    User.update({
+      coinCode: response.data.access_token,
+      token_type: response.data.token_type,
+      scope: response.data.scope
+    }, {
+      where: {
+        username:user
+      }
+    }).catch((err)=>{
+      console.log(err)
+    })
+
+    res.redirect('https://hyper-tickets.appspot.com/test')
+  }).catch((err)=>{
+    console.log(err)
+    res.send(JSON.stringify(err))
+  })
+})
 
 // test
 app.get('/test', (req,res)=>{
