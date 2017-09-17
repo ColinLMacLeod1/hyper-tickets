@@ -24,13 +24,6 @@ console.log(port)
 // Connect to CockroachDB
 const sequelize = new Sequelize('test', 'root', '', dbConfig);
 
-// Define the Account model for the accounts table
-const Account = sequelize.define('accounts', {
-  id: { type: Sequelize.INTEGER, primaryKey: true },
-  balance: { type: Sequelize.INTEGER },
-  text: {type: Sequelize.STRING}
-});
-
 // Define the Ticket model for the tickets table
 const Ticket = sequelize.define('tickets', {
   id: { type: Sequelize.INTEGER, primaryKey: true },
@@ -42,13 +35,13 @@ const Ticket = sequelize.define('tickets', {
   seat: {type: Sequelize.STRING}
 });
 
-// Define the Account model for the accounts table
+// Define the User model for the accounts table
 const User = sequelize.define('users', {
-  id: { type: Sequelize.INTEGER, primaryKey: true },
+  username: { type: Sequelize.STRING, primaryKey: true },
+  password: { type: Sequelize.STRING },
   displayName: { type: Sequelize.STRING },
   avatar: {type: Sequelize.STRING}
 });
-
 /*
 // Create the each table.
 if(process.env.UPDATETABLES){
@@ -65,7 +58,7 @@ if(process.env.UPDATETABLES){
   User.sync({force: true}).then(function() {
     // Insert two rows into the "accounts" table.
     User.bulkCreate([
-      {id: 1}
+      {username: "test"}
     ]);
   }).catch(function(err) {
     console.error('error: ' + err.message);
@@ -74,7 +67,7 @@ if(process.env.UPDATETABLES){
 */
 
 // BUY Ticket
-app.post('/api/buy', function(req,res){
+app.post('/api/buy', (req,res)=>{
   // Blockchain shit goes here then ->
   Ticket.update({
     owner: req.body.owner
@@ -107,10 +100,10 @@ app.post('/api/buy', function(req,res){
 
 // CREATE Ticket
 app.post('/api/create', (req,res)=>{
-  Ticket.findAndCountAll({}).then((result)=>{
-    var newid = result.count+1;
+  Ticket.max('id').then((result)=>{
+    var newid = result+1;
     // ADD TO BLOCKCHAIN HERE .then ->
-    Ticket.create([{
+    Ticket.create({
       id: newid,
       owner: req.body.owner,
       title: req.body.title,
@@ -118,7 +111,7 @@ app.post('/api/create', (req,res)=>{
       price: req.body.price,
       type: req.body.type,
       seat: req.body.seat
-    }]).then(() => {
+    }).then(() => {
       Ticket.findAndCountAll({
         where:{
           id: newid
@@ -143,43 +136,91 @@ app.post('/api/create', (req,res)=>{
         console.log(err)
       }
     })
+  }).catch((err)=>{
+    res.send(err)
+    console.log(err)
   })
 })
 
 // EDIT Ticket
-app.post('/api/edit', function(req,res){
+app.post('/api/edit', (req,res)=>{
 
 })
 
 // DELETE Ticket
-app.post('/api/delete', function(req,res){
+app.post('/api/delete', (req,res)=>{
+  // Blockchain confirmation .then ->
+  Ticket.destroy({
+    where: {
+      id: req.body.id
+    }
+  }).then(()=>{
+    Ticket.findOne({
+      where: {
+        id: req.body.id
+      }
+    })
+  }).catch((err)=>{
 
+  })
 })
 
 // LOGIN
-app.post('/api/login', function(req,res){
-
+app.post('/api/login', (req,res)=>{
+  User.findOne({
+    where: {
+      username: req.body.username,
+      password: req.body.password
+    }
+  }).then((result)=>{
+    console.log(result)
+    if(!result){
+      res.send(false)
+    } else {
+      res.send(true)
+    }
+  }).catch((err)=>{
+    res.send(err)
+    console.log(err)
+  })
 })
 
-// USER
-app.post('/api/user', function(req,res){
-  console.log(req.body.text)
-  Account.bulkCreate([
-    {id: req.body.id, text: req.body.text}
-  ])
-  res.send(JSON.stringify(req.body.text))
+// SIGNUP
+app.post('/api/signup', (req,res)=>{
+  User.create({
+    username: req.body.username,
+    displayName: req.body.displayName,
+    password: req.body.password
+  }).catch((err)=>{
+    if(err.name=='SequelizeUniqueConstraintError'){
+      console.log('User already exists')
+      res.send('User already exists')
+    } else {
+      res.send(err)
+      console.log(err)
+    }
+  })
+  //No confirmation yet
+})
+
+// SEARCH
+
+
+// GET 50 recent tickets
+app.get('/api/recenttickets', (req,res)=>{
+
 })
 
 
 
 // test
-app.get('/test', function(req,res){
+app.get('/test', (req,res)=>{
   console.log('test')
   res.send("test")
 })
 
 // Server Port
-app.listen(process.env.PORT || port,function() {
+app.listen(process.env.PORT || port,()=>{
 	console.log('App listening on port', process.env.PORT || port)
 })
 module.exports = app;
