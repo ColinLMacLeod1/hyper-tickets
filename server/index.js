@@ -52,7 +52,7 @@ const User = sequelize.define('users', {
     coinName: { type: Sequelize.STRING },
     coinProfile: { type: Sequelize.STRING }
 });
-/*
+
 // Create the each table.
   // Tickets table
   Ticket.sync({force: true}).then(function() {
@@ -68,7 +68,7 @@ const User = sequelize.define('users', {
   }).catch(function(err) {
     console.error('error: ' + err.message);
   });
-*/
+
 
 // BUY Ticket
 app.post('/api/buy', (req, res) => {

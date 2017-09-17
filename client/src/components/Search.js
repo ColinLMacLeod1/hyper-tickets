@@ -37,7 +37,6 @@ export default class Search extends React.Component {
    buy = (id,index) => {
      const self = this;
      console.log(index)
-     console.log(this.state.results[index].data.ownerId)
      axios.post('https://hyper-tickets.appspot.com/api/buy',{
        ownerId:"colin",
        id:id
