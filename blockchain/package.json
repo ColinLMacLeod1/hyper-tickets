@@ -1,0 +1,19 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "fabric-start": "cd scripts && ./startFabric.sh",
+    "fabric-stop": "cd basic-network && ./stop.sh",
+    "fabric-teardown": "cd basic-network && ./teardown.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "fabric-ca-client": "^1.0.2",
+    "fabric-client": "^1.0.2"
+  }
+}
