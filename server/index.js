@@ -50,7 +50,7 @@ const User = sequelize.define('users', {
   coinName: {type: Sequelize.STRING},
   coinProfile: {type: Sequelize.STRING}
 });
-/*
+
 // Create the each table.
 if(process.env.UPDATETABLES){
   // Tickets table
@@ -72,7 +72,7 @@ if(process.env.UPDATETABLES){
     console.error('error: ' + err.message);
   });
 }
-*/
+
 
 // BUY Ticket
 app.post('/api/buy', (req,res)=>{
