@@ -98,7 +98,7 @@ app.post('/api/buy', (req, res) => {
         .then((result) => {
             if (!result) {
                 return res.status(404).send('Ticket does not exist')
-            } else if (result.owner === req.body.owner) {
+            } else if (result.ownerId === req.body.ownerId) {
                 console.log('Transaction Complete');
             } else {
                 return res.status(400).send('Transaction Incomplete')
