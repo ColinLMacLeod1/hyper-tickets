@@ -9,6 +9,7 @@ import Login from './Login';
 import Coinbase from './Coinbase';
 import {Tabs, Tab} from 'material-ui/Tabs'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class App extends Component {
 	/**
@@ -32,7 +33,7 @@ class App extends Component {
 
 		return (
 			<div id="container">
-				<center className="header"><h1 className="headerTitle">Hyper Tickets</h1></center>
+				<center className="header"><h1 className="headerTitle">Hyper Tickets</h1><RaisedButton label="Coinbase Login" primary={true} /></center>
 				<Tabs>
 					<Tab label="Discover">
 						{this.renderTicketList()}

@@ -48,7 +48,7 @@ export default class Search extends React.Component {
     return (
       <div className="searchContainer">
         <TextField
-          hintText="Full width"
+          hintText="Search"
           fullWidth={true}
           value={this.state.search}
           onChange={this.handleChange}

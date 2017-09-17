@@ -19,14 +19,17 @@ body {
 	height: 4rem;
 	background-color: #3366cc;
 	color: white;
-	padding: auto;
+	display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 .headerTitle {
 	color: white;
 	font-family: 'Quicksand';
 	text-align: center;
 	font-size: 250%;
-	margin: 0;
+	margin: 0 2vw 0 0;
 }
 .ticket {
 	margin: 1em;
