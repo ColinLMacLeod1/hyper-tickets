@@ -207,7 +207,7 @@ function listAllTickets(req, res, next) {
 }
 
 function transferTicket(req, res, next) {
-    const { id: ticketId } = req.params;
+    const { id: ticketId } = req.body;
     const { ownerId } = req.query;
 
     const client = new hfc();
@@ -236,7 +236,7 @@ function transferTicket(req, res, next) {
                 isProposalGood = true;
                 console.log('transaction proposal was good');
             } else {
-                console.error('transaction proposal was bad');
+                throw new Error('transaction proposal was bad');
             }
             if (isProposalGood) {
                 console.log(util.format(
@@ -304,10 +304,10 @@ function transferTicket(req, res, next) {
         .then(response => {
             if (response.status === 'SUCCESS') {
                 console.log('Successfully sent transaction to the orderer.');
-                return txId.getTransactionID();
+                return res.send(txId.getTransactionID());
             } else {
                 console.error('Failed to order the transaction. Error code: ' + response.status);
-                return 'Failed to order the transaction. Error code: ' + response.status;
+                return res.status(400).send('Failed to order the transaction. Error code: ' + response.status);
             }
         })
         .catch(err => {
