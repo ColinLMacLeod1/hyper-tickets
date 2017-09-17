@@ -42,9 +42,9 @@ const User = sequelize.define('users', {
   displayName: { type: Sequelize.STRING },
   avatar: {type: Sequelize.STRING}
 });
-
+/*
 // Create the each table.
-
+if(process.env.UPDATETABLES){
   // Tickets table
   Ticket.sync({force: true}).then(function() {
     // Insert two rows into the "accounts" table.
@@ -63,7 +63,8 @@ const User = sequelize.define('users', {
   }).catch(function(err) {
     console.error('error: ' + err.message);
   });
-
+}
+*/
 
 // BUY Ticket
 app.post('/api/buy', (req,res)=>{
@@ -206,15 +207,15 @@ app.post('/api/signup', (req,res)=>{
 
 
 // GET 50 recent tickets
-app.get('/api/recenttickets', (req,res)=>{
+app.get('/api/ticketlist', (req,res)=>{
   Ticket.findAll({
     order: [['id', 'DESC']],
-    limit: 2
+    limit: 20
   }).then((result)=>{
     if(!result){
       res.send('No tickets exist')
     } else{
-      res.send(JSON.stringify(results))
+      res.send(JSON.stringify(result))
     }
   }).catch((err)=>{
     console.log(err)
