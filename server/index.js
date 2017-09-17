@@ -318,8 +318,6 @@ app.get('/api/ticket/:id', (req,res)=>{
 // GET coinbase
 app.get('/api/coincode/', (req,res)=>{
   var user = req.query.state;
-  console.log(req.query.code)
-  //res.send(JSON.stringify(req.query.code+req.query.state))
   axios.post('https://api.coinbase.com/oauth/token',{
     grant_type: "authorization_code",
     code: req.query.code,
@@ -327,7 +325,6 @@ app.get('/api/coincode/', (req,res)=>{
     client_secret: "0f3cd06de247ba1e9f731ad34df9385e2ef41293a0d277274b21fb4fee4d4dd7",
     redirect_uri: "https://hyper-tickets.appspot.com/api/coincode/"
   }).then((response)=>{
-    console.log(response.data)
     User.update({
       coinCode: response.data.access_token,
       token_type: response.data.token_type,
