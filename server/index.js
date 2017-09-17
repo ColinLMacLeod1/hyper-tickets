@@ -360,7 +360,7 @@ app.get('/test', (req,res)=>{
 
 // Catch all Handler
 app.get('*', (req,res)=>{
-  res.sendFile(path.join(__dirname+'/testDist/index.html'))
+  res.sendFile(path.join(__dirname,'testDist/index.html'))
 })
 
 // Server Port
