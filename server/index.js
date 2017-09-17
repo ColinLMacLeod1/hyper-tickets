@@ -7,6 +7,7 @@ const config = require('config')
 const yes = require('yes-https')
 const Sequelize = require('sequelize-cockroachdb')
 const axios = require('axios')
+const Client = require('coinbase').Client;
 
 const app = express()
 
@@ -50,7 +51,7 @@ const User = sequelize.define('users', {
   coinName: {type: Sequelize.STRING},
   coinProfile: {type: Sequelize.STRING}
 });
-
+/*
 // Create the each table.
 if(process.env.UPDATETABLES){
   // Tickets table
@@ -72,11 +73,13 @@ if(process.env.UPDATETABLES){
     console.error('error: ' + err.message);
   });
 }
-
+*/
 
 // BUY Ticket
 app.post('/api/buy', (req,res)=>{
   // Blockchain shit goes here then ->
+  //coinbase
+
   Ticket.update({
     ownerId: req.body.ownerId
   }, {
@@ -328,7 +331,8 @@ app.get('/api/coincode/', (req,res)=>{
     redirect_uri: "https://hyper-tickets.appspot.com/api/coincode/"
   }).then((response)=>{
     User.update({
-      coinCode: response.data.access_token
+      coinCode: response.data.access_token,
+      coinName: response.data.refresh_token
     }, {
       where: {
         username:user
@@ -341,6 +345,18 @@ app.get('/api/coincode/', (req,res)=>{
         Authorization: 'Bearer ' + response.data.access_token
       }}).then((resdata)=>{
         console.log(resdata.data)
+        User.update({
+          avatar: resdata.data.data.avatar_url,
+          coinId: resdata.data.data.id,
+          coinUsername: resdata.data.data.username,
+          displayName: resdata.data.data.name,
+          coinProfile: resdata.data.data.profile_url
+        },
+        {
+          where: {
+            username: user
+          }
+        })
         res.send(JSON.stringify(resdata.data))
       }).catch((err)=>{
 
@@ -349,6 +365,28 @@ app.get('/api/coincode/', (req,res)=>{
   }).catch((err)=>{
     console.log(err)
     res.send(JSON.stringify(err))
+  })
+})
+
+// Coin exchange
+app.post('/api/pay', (req,res)=>{
+  var payInfo = {amount:req.body.amount}
+  User.findOne({
+    where:{
+      username: req.body.to
+    }
+  }).then((to)=>{
+      payInfo.to = to.coinId;
+      User.findOne({
+        where:{
+          username: req.body.from
+        }
+      }).then((from)=>{
+        payInfo.from = from.coinId
+        payInfo.access = from.coinCode
+        payInfo.refresh = from.coinName
+        
+      })
   })
 })
 
