@@ -45,8 +45,10 @@ const User = sequelize.define('users', {
   displayName: { type: Sequelize.STRING },
   avatar: {type: Sequelize.STRING},
   coinCode: {type: Sequelize.STRING},
-  token_type: {type: Sequelize.STRING},
-  scope: {type: Sequelize.STRING}
+  coinId: {type: Sequelize.STRING},
+  coinUsername: {type: Sequelize.STRING},
+  coinName: {type: Sequelize.STRING},
+  coinProfile: {type: Sequelize.STRING}
 });
 /*
 // Create the each table.
@@ -326,9 +328,7 @@ app.get('/api/coincode/', (req,res)=>{
     redirect_uri: "https://hyper-tickets.appspot.com/api/coincode/"
   }).then((response)=>{
     User.update({
-      coinCode: response.data.access_token,
-      token_type: response.data.token_type,
-      scope: response.data.scope
+      coinCode: response.data.access_token
     }, {
       where: {
         username:user
@@ -359,10 +359,11 @@ app.get('/test', (req,res)=>{
 })
 
 // Catch all Handler
+/*
 app.get('*', (req,res)=>{
   res.sendFile(path.join(__dirname,'testDist/index.html'))
 })
-
+*/
 // Server Port
 app.listen(process.env.PORT || port,()=>{
 	console.log('App listening on port', process.env.PORT || port)
