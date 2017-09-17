@@ -207,8 +207,8 @@ function listAllTickets(req, res, next) {
 }
 
 function transferTicket(req, res, next) {
-    const { id: ticketId } = req.body;
-    const { ownerId } = req.query;
+    const { id: ticketId } = req.params;
+    const { ownerId } = req.body;
 
     const client = new hfc();
     let txId = null;

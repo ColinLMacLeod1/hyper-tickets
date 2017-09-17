@@ -94,9 +94,9 @@ app.post('/api/buy', (req, res) => {
                 return res.status(404).send('Ticket does not exist')
             } else if (result.ownerId === req.body.ownerId) {
                 console.log('Transaction Complete');
-                const url = `${blockchainUrl}tickets/${req.body.id}?ownerId=${req.body.ownerId}`;
+                const url = `${blockchainUrl}tickets/${req.body.id}`;
                 console.log(url);
-                return axios.put(url)
+                return axios.put(url, { ownerId: req.body.ownerId })
                     .then(response => res.send(response));
             } else {
                 return res.status(400).send('Transaction Incomplete')
