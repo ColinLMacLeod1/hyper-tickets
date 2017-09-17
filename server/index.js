@@ -336,8 +336,16 @@ app.get('/api/coincode/', (req,res)=>{
     }).catch((err)=>{
       console.log(err)
     })
+    axios.get('', {
+      headers: {
+        Authorization: 'Bearer ' + response.data.access_token
+      }}).then((resdata)=>{
+        console.log(resdata.data)
+        res.send(JSON.stringify(resdata.data))
+      }).catch((err)=>{
 
-    res.redirect('https://hyper-tickets.appspot.com/api/user/'+user)
+      })
+
   }).catch((err)=>{
     console.log(err)
     res.send(JSON.stringify(err))
