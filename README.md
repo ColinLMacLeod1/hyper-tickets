@@ -28,21 +28,22 @@
 #### Models
 
 1. Tickets
-id: { type: Sequelize.INTEGER, primaryKey: true },
-owner: { type: Sequelize.STRING },
-title: {type: Sequelize.STRING},
-location: {type: Sequelize.STRING},
-price: {type: Sequelize.DECIMAL},
-type: {type: Sequelize.STRING},
-seat: {type: Sequelize.STRING}
+id: { type: Sequelize.INTEGER, primaryKey: true },  
+owner: { type: Sequelize.STRING },  
+title: {type: Sequelize.STRING},  
+location: {type: Sequelize.STRING},  
+price: {type: Sequelize.DECIMAL},  
+type: {type: Sequelize.STRING},  
+seat: {type: Sequelize.STRING}  
 
 2. Users
-username: { type: Sequelize.STRING, primaryKey: true },
-password: { type: Sequelize.STRING },
-displayName: { type: Sequelize.STRING },
-avatar: {type: Sequelize.STRING}
+username: { type: Sequelize.STRING, primaryKey: true },  
+password: { type: Sequelize.STRING },  
+displayName: { type: Sequelize.STRING },  
+avatar: {type: Sequelize.STRING}   
 
 |Endpoint          |Params             |Returns         |Method|
+| --- | --- | --- | --- |
 |/api/ticket/:id   |id        |Ticket (object) |GET|
 |/api/tickelist|None|Recent 20 tickets(array)|GET|
 |/api/user/:username|username|User (object)|GET|
