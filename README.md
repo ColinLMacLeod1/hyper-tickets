@@ -29,7 +29,7 @@
 
 1. Tickets  
 id: { type: Sequelize.INTEGER, primaryKey: true },  
-owner: { type: Sequelize.STRING },  
+ownerId: { type: Sequelize.STRING },  
 title: {type: Sequelize.STRING},  
 location: {type: Sequelize.STRING},  
 price: {type: Sequelize.DECIMAL},  
@@ -51,5 +51,5 @@ avatar: {type: Sequelize.STRING}
 |/api/login|username, password (string)|User (object) or FALSE|POST|
 |/api/delete|id (integer)|String result|POST|
 |/api/create|owner,title,location,price(decimal),type,seat|String result|POST|
-|/api/buy|owner(purchaser),id(integer)|String result|POST|
+|/api/buy|ownerId(purchaser),id(integer)|String result|POST|
 |/api/edit|<parameter(s) to change>,id(required)|'Updated' or err|POST|
