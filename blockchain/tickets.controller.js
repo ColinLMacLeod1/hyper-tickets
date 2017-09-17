@@ -103,25 +103,22 @@ function createTicket(req, res, next) {
                                            // 'sendTransaction()' call
                     })
                     .catch(err => {
-                        console.error(
+                        throw new Error(
                             'Failed to send transaction and get notifications within the timeout period.'
                         );
-                        return 'Failed to send transaction and get notifications within the timeout period.';
                     });
             } else {
-                console.error(
+                throw new Error(
                     'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...'
                 );
-                return 'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...';
             }
         })
         .then(response => {
             if (response.status === 'SUCCESS') {
                 console.log('Successfully sent transaction to the orderer.');
-                return txId.getTransactionID();
+                res.send(txId.getTransactionID());
             } else {
-                console.error('Failed to order the transaction. Error code: ' + response.status);
-                return 'Failed to order the transaction. Error code: ' + response.status;
+                res.status(response.status).send('Failed to order the transaction. Error code: ' + response.status);
             }
         })
         .catch(err => {
