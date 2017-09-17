@@ -206,8 +206,31 @@ app.post('/api/signup', (req,res)=>{
   //No confirmation yet
 })
 
-// SEARCH
+// User info
+app.get('/api/user/:username', (req,res)=>{
+  User.findOne({
+    where:{
+      username: req.params.username
+    }
+  }).then((result){
+    console.log('User Found')
+    res.send(JSON.stringify(result))
+  }).catch((err)=>{
+    res.send(err)
+    console.log(err)
+  })
+})
 
+// SEARCH
+app.post('/api/search', (req,res)=>{
+  if(true) {
+    Ticket.findAll({
+      where:{
+        title:
+      }
+    })
+  }
+})
 
 // GET 50 recent tickets
 app.get('/api/ticketlist', (req,res)=>{
