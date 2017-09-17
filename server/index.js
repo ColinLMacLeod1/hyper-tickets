@@ -105,8 +105,10 @@ app.post('/api/buy', (req, res) => {
             }
         })
         .then(() => {
-            const url = `${blockchainUrl}tickets/${req.body.id}?ownerId=${req.body.ownerId}`;
-            return axios.put(url, {});
+
+            const url = `${blockchainUrl}tickets/${req.body.id}`;
+            console.log(url)
+            return axios.put(url, {ownerId: req.body.ownerId});
         })
         .then(response => {
             console.log(response);
